@@ -1,9 +1,11 @@
 #!/usr/bin/env python
+import re
 import sys
 from gevent import wsgi
 
+parts_re = re.compile("^/([^/]+)/([0-9]+)$")
 def basic_response(env, start_response):
-    _, txt, num = env['PATH_INFO'].split('/')
+    txt, num = parts_re.match(env['PATH_INFO']).groups()
     start_response('200 OK', [('Content-Type', 'text/html')])
     try:
         n = int(num)
